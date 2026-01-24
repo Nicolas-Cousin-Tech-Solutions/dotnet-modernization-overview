@@ -1,0 +1,12 @@
+{
+  "name": "dotnet-platform-evolution",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "prepare-reveal": "node scripts/copy-reveal.js",
+	"start": "npx serve public"
+  },
+  "dependencies": {
+    "reveal.js": "^5.2.1"
+  }
+}
