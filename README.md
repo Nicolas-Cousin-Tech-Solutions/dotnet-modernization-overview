@@ -1,5 +1,9 @@
 # .NET Platform Evolution
 
+| Github pages | PDF | .Net |
+| ------------ | --- | ---- |
+| [![GitHub Pages](https://img.shields.io/badge/GitHub-Pages-brightgreen?style=flat-square&logo=github)](https://nicolas-cousin-tech-solutions.github.io/dotnet-modernization-overview) | [![PDF](https://img.shields.io/badge/PDF-Auto--generated-blue?style=flat-square&logo=githubactions)](https://nicolas-cousin-tech-solutions.github.io/dotnet-modernization-overview/exports/dotnet-modernization-overview.pdf) | [![.NET 8 LTS](https://img.shields.io/badge/.NET-8%20LTS-purple?style=flat-square&logo=dotnet)](https://dotnet.microsoft.com/) |
+
 Présentation technique sur l’évolution de l’écosystème **.NET** :
 
 - .NET Framework 4.8 → .NET moderne
@@ -75,7 +79,7 @@ Aucune action manuelle n’est requise.
 
 ## 📂 Structure du repository
 
-```text
+~~~text
 docs/
  ├─ index.html
  ├─ slides.md
@@ -86,3 +90,10 @@ docs/
 scripts/
  ├─ copy-reveal.js
  └─ export-pdf.js
+~~~
+
+---
+
+## 📜 Licence
+
+Contenu pédagogique – usage interne / formation.
