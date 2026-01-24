@@ -74,8 +74,17 @@ async function main() {
   // print-pdf = mode impression Reveal
   await page.goto(`http://127.0.0.1:${PORT}/?print-pdf`, { waitUntil: "networkidle" });
 
-  // petit buffer pour fonts/highlight
-  await page.waitForTimeout(800);
+  // Attendre que Reveal soit prêt (évite capture trop tôt)
+  await page.waitForSelector(".reveal.ready", { timeout: 30000 });
+
+  // Attendre que le contenu (markdown) soit réellement injecté (spécifique à ton cas)
+  await page.waitForFunction(() => {
+    const t = document.body.innerText || "";
+    return t.includes("QUESTIONS") && t.includes("Support pédagogique") && t.includes("Réutilisation");
+  }, { timeout: 30000 });
+
+    // Petit buffer pour les fonts/highlight après rendu
+  await page.waitForTimeout(500);
 
   await page.pdf({
     path: OUT_FILE,
