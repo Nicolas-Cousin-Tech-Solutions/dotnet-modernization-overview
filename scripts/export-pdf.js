@@ -1,39 +1,57 @@
 import { chromium } from "playwright";
+import http from "http";
+import { readFile } from "fs/promises";
 import fs from "fs";
 import path from "path";
+import { fileURLToPath } from "url";
 
-const PORT = 3000;
-const SITE_DIR = "docs"; // ou "public"
-const OUT_DIR = "exports";
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Site GitHub Pages
+const SITE_DIR = path.resolve(__dirname, "..", "docs");
+
+// PDF output (servi par GitHub Pages)
+const OUT_DIR = path.join(SITE_DIR, "exports");
 const OUT_FILE = path.join(OUT_DIR, "dotnet-modernization-overview.pdf");
 
-async function main() {
-  fs.mkdirSync(OUT_DIR, { recursive: true });
+// Port local pour servir docs/
+const PORT = 4173;
 
-  // Serve local statique via un petit serveur node (sans dépendance)
-  const { createServer } = await import("http");
-  const { readFile } = await import("fs/promises");
-  const { extname, join } = await import("path");
+const MIME = {
+  ".html": "text/html; charset=utf-8",
+  ".md": "text/plain; charset=utf-8",
+  ".js": "text/javascript; charset=utf-8",
+  ".css": "text/css; charset=utf-8",
+  ".json": "application/json; charset=utf-8",
+  ".png": "image/png",
+  ".jpg": "image/jpeg",
+  ".jpeg": "image/jpeg",
+  ".svg": "image/svg+xml",
+  ".woff": "font/woff",
+  ".woff2": "font/woff2"
+};
 
-  const mime = {
-    ".html": "text/html",
-    ".md": "text/plain",
-    ".js": "text/javascript",
-    ".css": "text/css",
-    ".json": "application/json",
-    ".png": "image/png",
-    ".jpg": "image/jpeg",
-    ".jpeg": "image/jpeg",
-    ".svg": "image/svg+xml"
-  };
+function safeJoin(root, reqUrl) {
+  const cleanPath = decodeURIComponent((reqUrl || "/").split("?")[0]);
+  const rel = cleanPath === "/" ? "/index.html" : cleanPath;
+  const target = path.normalize(path.join(root, rel));
+  return target.startsWith(root) ? target : null;
+}
 
-  const server = createServer(async (req, res) => {
-    const urlPath = (req.url || "/").split("?")[0];
-    const filePath = join(process.cwd(), SITE_DIR, urlPath === "/" ? "index.html" : urlPath);
+async function serveStatic(root) {
+  const server = http.createServer(async (req, res) => {
+    const target = safeJoin(root, req.url);
+    if (!target) {
+      res.writeHead(400);
+      res.end("Bad request");
+      return;
+    }
 
     try {
-      const data = await readFile(filePath);
-      res.writeHead(200, { "Content-Type": mime[extname(filePath)] || "application/octet-stream" });
+      const data = await readFile(target);
+      const ext = path.extname(target).toLowerCase();
+      res.writeHead(200, { "Content-Type": MIME[ext] || "application/octet-stream" });
       res.end(data);
     } catch {
       res.writeHead(404);
@@ -42,15 +60,22 @@ async function main() {
   });
 
   await new Promise((resolve) => server.listen(PORT, resolve));
+  return server;
+}
+
+async function main() {
+  fs.mkdirSync(OUT_DIR, { recursive: true });
+
+  const server = await serveStatic(SITE_DIR);
 
   const browser = await chromium.launch();
-  const page = await browser.newPage();
+  const page = await browser.newPage({ viewport: { width: 1280, height: 720 } });
 
-  // "print-pdf" = pagination PDF
-  await page.goto(`http://localhost:${PORT}/?print-pdf`, { waitUntil: "networkidle" });
+  // print-pdf = mode impression Reveal
+  await page.goto(`http://127.0.0.1:${PORT}/?print-pdf`, { waitUntil: "networkidle" });
 
-  // Donne un petit temps pour les polices / highlight
-  await page.waitForTimeout(500);
+  // petit buffer pour fonts/highlight
+  await page.waitForTimeout(800);
 
   await page.pdf({
     path: OUT_FILE,
@@ -61,7 +86,7 @@ async function main() {
   await browser.close();
   server.close();
 
-  console.log(`PDF exported to: ${OUT_FILE}`);
+  console.log(`PDF generated: ${OUT_FILE}`);
 }
 
 main().catch((e) => {
