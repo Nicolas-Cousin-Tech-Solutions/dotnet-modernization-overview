@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 
 const src = "node_modules/reveal.js";
-const dest = "public/reveal";
+const dest = "docs/reveal";
 
 const copy = (from, to) => {
   fs.mkdirSync(to, { recursive: true });
@@ -14,4 +14,4 @@ const copy = (from, to) => {
 };
 
 copy(src, dest);
-console.log("Reveal.js copied to public/reveal");
+console.log("Reveal.js copied to docs/reveal");

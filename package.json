@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "prepare-reveal": "node scripts/copy-reveal.js",
-	"start": "npx serve public"
+	"start": "npx serve docs -l 3000"
   },
   "dependencies": {
     "reveal.js": "^5.2.1"
