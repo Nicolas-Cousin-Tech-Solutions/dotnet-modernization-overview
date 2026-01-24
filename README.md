@@ -97,3 +97,7 @@ scripts/
 ## 📜 Licence
 
 Contenu pédagogique – usage interne / formation.
+
+© 2026 — Support pédagogique.
+Usage formation et sensibilisation.
+Réutilisation ou diffusion externe à valider.
