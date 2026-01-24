@@ -4,9 +4,13 @@
   "type": "module",
   "scripts": {
     "prepare-reveal": "node scripts/copy-reveal.js",
-	"start": "npx serve docs -l 3000"
+    "start": "npx serve docs -l 3000",
+    "export:pdf": "node scripts/export-pdf.js"
   },
   "dependencies": {
     "reveal.js": "^5.2.1"
+  },
+  "devDependencies": {
+    "playwright": "^1.58.0"
   }
 }
