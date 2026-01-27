@@ -65,21 +65,41 @@ jobs:
           # Copy docs content to preview (excluding preview directory itself)
           rsync -av --exclude='preview' docs/ "$PREVIEW_DIR/"
 
-      - name: Commit preview
+      - name: Commit preview to main branch
         id: commit
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           
-          git add "docs/preview/${{ steps.branch.outputs.name }}"
+          # Fetch main branch
+          git fetch origin main
           
-          if git diff --staged --quiet; then
-            echo "changed=false" >> $GITHUB_OUTPUT
-            echo "No changes to commit"
+          # Check if there are changes to commit
+          if [ -d "docs/preview/${{ steps.branch.outputs.name }}" ]; then
+            # Checkout main branch
+            git checkout main
+            
+            # Copy preview from feature branch
+            git checkout ${{ github.ref }} -- "docs/preview/${{ steps.branch.outputs.name }}"
+            
+            # Check if there are changes
+            if git diff --staged --quiet && git diff --quiet; then
+              echo "changed=false" >> $GITHUB_OUTPUT
+              echo "No changes to commit"
+              git checkout ${{ github.ref }}
+            else
+              # Commit and push to main
+              git add "docs/preview/${{ steps.branch.outputs.name }}"
+              git commit -m "chore: update preview for ${{ steps.branch.outputs.original }}"
+              git push origin main
+              echo "changed=true" >> $GITHUB_OUTPUT
+              
+              # Return to feature branch
+              git checkout ${{ github.ref }}
+            fi
           else
-            git commit -m "chore: update preview for ${{ steps.branch.outputs.original }}"
-            git push
-            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "Preview directory not found"
           fi
 
       - name: Find Pull Request
