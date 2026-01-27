@@ -368,3 +368,18 @@ Phrase de clôture :
   © 2026 — Support pédagogique.<br/>
   Usage formation et sensibilisation. Réutilisation ou diffusion externe à valider.
 </div>
+
+---
+
+## Ressources
+
+### 📦 Dépôt GitHub
+[github.com/Nicolas-Cousin-Tech-Solutions/dotnet-modernization-overview](https://github.com/Nicolas-Cousin-Tech-Solutions/dotnet-modernization-overview)
+
+### 📄 Télécharger le PDF
+[dotnet-modernization-overview.pdf](https://nicolas-cousin-tech-solutions.github.io/dotnet-modernization-overview/exports/dotnet-modernization-overview.pdf)
+
+<div style="margin-top:4rem; font-size:0.5em; line-height:1.35; opacity:0.6;">
+  © 2026 — Support pédagogique.<br/>
+  Usage formation et sensibilisation. Réutilisation ou diffusion externe à valider.
+</div>
