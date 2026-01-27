@@ -71,38 +71,39 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           
+          # Store current branch for returning later
+          CURRENT_BRANCH="${{ steps.branch.outputs.original }}"
+          
           # Fetch main branch
           git fetch origin main
           
-          # Check if there are changes to commit
-          if [ -d "docs/preview/${{ steps.branch.outputs.name }}" ]; then
-            # Checkout main branch
-            git checkout main
-            
-            # Copy preview from feature branch
-            git checkout ${{ steps.branch.outputs.original }} -- "docs/preview/${{ steps.branch.outputs.name }}"
-            
-            # Add files to staging
-            git add "docs/preview/${{ steps.branch.outputs.name }}"
-            
-            # Check if there are changes
-            if git diff --staged --quiet; then
-              echo "changed=false" >> $GITHUB_OUTPUT
-              echo "No changes to commit"
-              git checkout ${{ steps.branch.outputs.original }}
-            else
-              # Commit and push to main
-              git commit -m "chore: update preview for ${{ steps.branch.outputs.original }}"
-              git push origin main
-              echo "changed=true" >> $GITHUB_OUTPUT
-              
-              # Return to feature branch
-              git checkout ${{ steps.branch.outputs.original }}
-            fi
-          else
+          # Checkout main branch
+          git checkout main
+          
+          # Copy preview from feature branch
+          git checkout "$CURRENT_BRANCH" -- "docs/preview/${{ steps.branch.outputs.name }}" || {
             echo "changed=false" >> $GITHUB_OUTPUT
-            echo "Preview directory not found"
+            echo "Failed to checkout preview directory"
+            git checkout "$CURRENT_BRANCH"
+            exit 0
+          }
+          
+          # Add files to staging
+          git add "docs/preview/${{ steps.branch.outputs.name }}"
+          
+          # Check if there are changes
+          if git diff --staged --quiet; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "No changes to commit"
+          else
+            # Commit and push to main
+            git commit -m "chore: update preview for $CURRENT_BRANCH"
+            git push origin main
+            echo "changed=true" >> $GITHUB_OUTPUT
           fi
+          
+          # Always return to feature branch
+          git checkout "$CURRENT_BRANCH"
 
       - name: Find Pull Request
         if: steps.commit.outputs.changed == 'true'
