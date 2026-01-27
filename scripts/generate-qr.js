@@ -1,5 +1,4 @@
 import QRCode from 'qrcode';
-import { writeFile } from 'fs/promises';
 
 const url = 'https://nicolas-cousin-tech-solutions.github.io/dotnet-modernization-overview/';
 const outputPath = './docs/qr-code-presentation.png';
