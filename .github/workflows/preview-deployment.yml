@@ -80,22 +80,24 @@ jobs:
             git checkout main
             
             # Copy preview from feature branch
-            git checkout ${{ github.ref }} -- "docs/preview/${{ steps.branch.outputs.name }}"
+            git checkout ${{ steps.branch.outputs.original }} -- "docs/preview/${{ steps.branch.outputs.name }}"
+            
+            # Add files to staging
+            git add "docs/preview/${{ steps.branch.outputs.name }}"
             
             # Check if there are changes
-            if git diff --staged --quiet && git diff --quiet; then
+            if git diff --staged --quiet; then
               echo "changed=false" >> $GITHUB_OUTPUT
               echo "No changes to commit"
-              git checkout ${{ github.ref }}
+              git checkout ${{ steps.branch.outputs.original }}
             else
               # Commit and push to main
-              git add "docs/preview/${{ steps.branch.outputs.name }}"
               git commit -m "chore: update preview for ${{ steps.branch.outputs.original }}"
               git push origin main
               echo "changed=true" >> $GITHUB_OUTPUT
               
               # Return to feature branch
-              git checkout ${{ github.ref }}
+              git checkout ${{ steps.branch.outputs.original }}
             fi
           else
             echo "changed=false" >> $GITHUB_OUTPUT
