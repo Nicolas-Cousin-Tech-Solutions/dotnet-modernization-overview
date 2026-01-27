@@ -364,6 +364,11 @@ Phrase de clôture :
 
 ## Questions
 
+<div style="text-align:center; margin:2rem 0;">
+  <img src="qr-code-presentation.png" alt="QR Code - Lien vers la présentation" style="width:200px; border:1px solid #ccc; padding:0.5rem; background:white;"/>
+  <p style="font-size:0.7em; margin-top:1rem;">Scannez pour accéder à la présentation</p>
+</div>
+
 <div style="margin-top:4rem; font-size:0.5em; line-height:1.35; opacity:0.6;">
   © 2026 — Support pédagogique.<br/>
   Usage formation et sensibilisation. Réutilisation ou diffusion externe à valider.
