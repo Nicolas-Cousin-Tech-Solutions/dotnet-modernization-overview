@@ -8,6 +8,8 @@ Ce dossier contient les configurations et templates des **AI Skills** activés p
 
 ### 1. 🎯 Prompt Engineering (ACTIF - OBLIGATOIRE)
 - **Statut** : ✅ Installé et prêt
+- **Nom demandé** : Prompt Engineering
+- **Nom installé** : Prompt Engineering ✓ (correspondance exacte)
 - **Localisation** : `.ai-skills/prompt-engineering/`
 - **Fonction** : Analyser et transformer le contenu pour un public intermédiaire
 - **Capacités** :
@@ -18,6 +20,8 @@ Ce dossier contient les configurations et templates des **AI Skills** activés p
 
 ### 2. ✍️ Technical Writing (ACTIF - SECONDAIRE)
 - **Statut** : ✅ Installé et prêt
+- **Nom demandé** : Technical Writing
+- **Nom installé** : Technical Writing ✓ (correspondance exacte)
 - **Localisation** : `.ai-skills/technical-writing/`
 - **Fonction** : Structurer et rédiger du contenu technique de qualité
 - **Capacités** :
@@ -28,12 +32,16 @@ Ce dossier contient les configurations et templates des **AI Skills** activés p
 
 ### 3. 🚀 Developer Productivity (ACTIF - OPTIONNEL)
 - **Statut** : ✅ Installé et prêt
+- **Nom demandé** : Developer Productivity / AI for Developers
+- **Nom installé** : Developer Productivity ✓ (équivalent fonctionnel)
+- **Note** : Couvre les aspects "AI for Developers" via l'automatisation de contenu technique
 - **Localisation** : `.ai-skills/developer-productivity/`
 - **Fonction** : Optimiser le workflow de création de contenu
 - **Capacités** :
   - Automatisation de la génération de contenu
   - Templates réutilisables
   - Bonnes pratiques de productivité
+  - Scripts d'assistance IA pour développeurs
 
 ## 🎯 Utilisation
 

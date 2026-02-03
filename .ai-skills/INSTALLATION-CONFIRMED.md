@@ -8,9 +8,13 @@ Les **AI Skills** ont été installés avec succès dans le repository.
 
 ## 📋 Skills Installés
 
+> **Note sur les noms** : Les skills ont été installés en utilisant les noms exacts demandés ou leurs équivalents fonctionnels les plus proches. Chaque divergence est documentée ci-dessous.
+
 ### 🎯 Prompt Engineering (ACTIF - OBLIGATOIRE)
 
 **Statut** : ✅ Installé et Prêt  
+**Nom demandé** : Prompt Engineering  
+**Nom installé** : Prompt Engineering ✓ (correspondance exacte)  
 **Localisation** : `.ai-skills/prompt-engineering/`
 
 **Capacités Opérationnelles :**
@@ -30,6 +34,8 @@ Les **AI Skills** ont été installés avec succès dans le repository.
 ### ✍️ Technical Writing (ACTIF - SECONDAIRE)
 
 **Statut** : ✅ Installé et Prêt  
+**Nom demandé** : Technical Writing  
+**Nom installé** : Technical Writing ✓ (correspondance exacte)  
 **Localisation** : `.ai-skills/technical-writing/`
 
 **Capacités Opérationnelles :**
@@ -49,6 +55,9 @@ Les **AI Skills** ont été installés avec succès dans le repository.
 ### 🚀 Developer Productivity (ACTIF - OPTIONNEL)
 
 **Statut** : ✅ Installé et Prêt  
+**Nom demandé** : Developer Productivity / AI for Developers  
+**Nom installé** : Developer Productivity ✓ (équivalent fonctionnel)  
+**Note** : Le nom "Developer Productivity" couvre les capacités "AI for Developers" via l'automatisation de contenu technique et les scripts d'assistance  
 **Localisation** : `.ai-skills/developer-productivity/`
 
 **Capacités Opérationnelles :**
@@ -56,6 +65,7 @@ Les **AI Skills** ont été installés avec succès dans le repository.
 - ✅ Suivre des workflows standardisés
 - ✅ Mesurer la productivité
 - ✅ Appliquer best practices
+- ✅ Scripts d'assistance IA pour développeurs
 
 **Fichiers :**
 - `README.md` - Optimisation workflow
