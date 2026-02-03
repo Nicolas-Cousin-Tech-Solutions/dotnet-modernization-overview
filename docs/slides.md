@@ -41,7 +41,7 @@ Focus sur les écarts majeurs. Les détails seront pour une prochaine session.
 
 Note:
 .NET Framework vit en maintenance. L’innovation est côté .NET moderne.
-Pas de HTTP/2/3 natif, pas de trimming/container images légères.
+Pas de HTTP/2/3 natif, pas de trimming / container images légères.
 
 --
 
@@ -157,8 +157,8 @@ Stratégie : activer les nullable warnings d’abord, puis records/patterns.
 | Web API 2 (.NET 4.8) | ASP.NET Core |
 |----------------------|--------------|
 | System.Web + IIS     | Kestrel + middleware, IIS/Nginx en reverse proxy |
-| Global.asax          | Program.cs minimal | 
-| Web.config           | appsettings.json + options | 
+| Global.asax          | Program.cs minimal |
+| Web.config           | appsettings.json + options |
 | DI externe           | DI native (`AddScoped`, etc.) |
 | Hébergement Windows  | Cross-plateforme, conteneurs |
 | HttpModules/Handlers | Middleware pipeline |
