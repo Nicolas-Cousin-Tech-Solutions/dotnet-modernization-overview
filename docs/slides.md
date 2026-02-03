@@ -153,8 +153,7 @@ ReadOnlySpan<byte> buffer = stackalloc byte[64];
 ```
 
 Note:
-Optimisations ciblées possibles quand on touche aux perfs réseau/IO.
-System.Text.Json, Kestrel et pipelines s’appuient sur Span/Memory pour limiter les allocations.
+Span = vue sur une zone mémoire contiguë (pile ou heap) sans allocation ; Memory = version bufferisable/async. Utile pour parsers, sérialisation, traitement de buffers réseau/IO sans copies inutiles. System.Text.Json, Kestrel et pipelines s’appuient dessus pour limiter les allocations.
 
 --
 
@@ -172,20 +171,30 @@ Stratégie : activer les nullable warnings d’abord, puis records/patterns.
 
 --
 
-## Architecture : le delta clé
+## Architecture : hébergement / config
 
 | Web API 2 (.NET 4.8) | ASP.NET Core |
 |----------------------|--------------|
 | System.Web + IIS     | Kestrel + middleware, IIS/Nginx en reverse proxy |
 | Global.asax          | Program.cs minimal |
 | Web.config           | appsettings.json + options |
-| DI externe           | DI native (`AddScoped`, etc.) |
 | Hébergement Windows  | Cross-plateforme, conteneurs |
-| HttpModules/Handlers | Middleware pipeline |
 
 Note:
 On garde les concepts métier, on change l’hébergement et la config.
-JSON par défaut via System.Text.Json (plus rapide, source-gen possible). Middleware remplace modules/handlers.
+
+--
+
+## Architecture : pipeline / sérialisation
+
+| Web API 2 (.NET 4.8) | ASP.NET Core |
+|----------------------|--------------|
+| HttpModules/Handlers | Middleware pipeline |
+| DI externe           | DI native (`AddScoped`, etc.) |
+| JSON via Newtonsoft  | System.Text.Json (source-gen possible) |
+
+Note:
+Pipeline middleware remplace les modules/handlers. JSON par défaut via System.Text.Json, plus rapide et source-gen possible.
 
 --
 
