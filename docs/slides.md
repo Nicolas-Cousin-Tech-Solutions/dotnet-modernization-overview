@@ -18,12 +18,12 @@ Pas de plan de migration détaillé aujourd’hui. Factuel, concret.
 
 ---
 
-## Agenda (45 min)
-- 10’ Plateforme : ce qui change vraiment de 4.8 à 8
-- 10’ C# : évolutions majeures (7.3 → 12)
-- 15’ Web API : delta concret (hosting, config, perf)
-- 5’ Synthèse
-- 5’ Questions
+## Agenda
+- Plateforme : ce qui change vraiment de 4.8 à 8
+- C# : évolutions majeures (7.3 → 12)
+- Web API : delta concret (hosting, config, perf)
+- Synthèse
+- Questions
 
 Note:
 Focus sur les écarts majeurs. Les détails seront pour une prochaine session.
@@ -66,6 +66,27 @@ Perf : HTTP/2/3, JSON source generators, pooling sockets, GC server. Infra : Pub
 Note:
 Moins de config XML, plus de conventions. Les habitudes de build changent peu.
 Nouveau tooling : `dotnet format`, analyzers Roslyn, hot reload, `dotnet user-secrets`.
+
+--
+
+## Outillage qui aide (immédiat)
+- `dotnet format` + analyzers (warnings en errors sur CI)
+- Hot reload pour les démos/itérations rapides
+- Templates SDK-style et `dotnet new api`
+
+Note:
+Mettre les analyzers en warning-as-error sur un périmètre pilote avant généralisation.
+
+--
+
+## Sécu / secrets (dev)
+- `dotnet user-secrets` pour le local
+- Config par environnement (appsettings.Development.json)
+- Certificats dev : `dotnet dev-certs https --trust`
+- Pas de secrets dans `appsettings.json`
+
+Note:
+Rappel simple pour éviter les fuites de secrets en repo/CI.
 
 ---
 
@@ -110,7 +131,7 @@ if (name is not null) Console.WriteLine(name.Length);
 
 Note:
 Les nulls deviennent explicites. On déplace les bugs vers la compilation.
-Activer `nullable enable` génère des warnings guidant les corrections.
+Activer `nullable enable` génère des warnings guidant les corrections. Faire sur un sous-projet/dossier pilote pour lisser l’effort.
 
 --
 
@@ -195,7 +216,11 @@ builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 app.MapGet("/api/users/{id}", async (int id, IUserService svc) =>
-    Results.Ok(await svc.GetAsync(id)));
+{
+  if (id <= 0) return Results.BadRequest();
+  var user = await svc.GetAsync(id);
+  return user is null ? Results.NotFound() : Results.Ok(user);
+});
 
 app.Run();
 ```
@@ -203,6 +228,30 @@ app.Run();
 Note:
 Utile pour endpoints simples, health checks, PoC. Controllers restent pertinents pour le reste.
 Binding simplifié, résultats typés (`Results`). Peut cohabiter avec controllers.
+
+--
+
+## Perf Web API (.NET 8)
+- System.Text.Json par défaut, source generators disponibles
+- HTTP/2 et HTTP/3 supportés
+- Output caching et rate limiting intégrés
+- Kestrel + pooling sockets / GC server
+
+Note:
+Source-gen JSON réduit allocations/cpu. HTTP/2/3 utile si proxy/clients compatibles.
+
+--
+
+## Source-gen JSON (exemple)
+```csharp
+[JsonSerializable(typeof(UserDto))]
+internal partial class AppJsonContext : JsonSerializerContext;
+
+var json = JsonSerializer.Serialize(user, AppJsonContext.Default.UserDto);
+```
+
+Note:
+Pas de changement métier, juste moins d’allocations. À activer sur les DTO des endpoints chauds.
 
 --
 
