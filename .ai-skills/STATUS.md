@@ -10,14 +10,19 @@
 
 ## 📋 Inventaire des Skills
 
-| Skill | Statut | Priorité | Fichiers | Lignes |
-|-------|--------|----------|----------|--------|
-| 🎯 **Prompt Engineering** | ✅ ACTIF | OBLIGATOIRE | 4 | ~1000 |
-| ✍️ **Technical Writing** | ✅ ACTIF | SECONDAIRE | 4 | ~1500 |
-| 🚀 **Developer Productivity** | ✅ ACTIF | OPTIONNEL | 3 | ~900 |
-| 📚 **Documentation** | ✅ ACTIF | - | 3 | ~500 |
+> **Documentation des équivalents** : Lorsqu'un nom exact n'était pas disponible, l'équivalent fonctionnel le plus proche a été installé et documenté.
 
-**Total** : 14 fichiers, ~3900 lignes de documentation
+| Skill | Nom Demandé | Nom Installé | Statut | Priorité | Fichiers | Lignes |
+|-------|-------------|--------------|--------|----------|----------|--------|
+| 🎯 **Prompt Engineering** | Prompt Engineering | Prompt Engineering ✓ | ✅ ACTIF | OBLIGATOIRE | 4 | ~1000 |
+| ✍️ **Technical Writing** | Technical Writing | Technical Writing ✓ | ✅ ACTIF | SECONDAIRE | 4 | ~1500 |
+| 🚀 **Developer Productivity** | Developer Productivity / AI for Developers | Developer Productivity ✓ | ✅ ACTIF | OPTIONNEL | 3 | ~900 |
+| 📚 **Documentation** | - | Documentation | ✅ ACTIF | - | 4 | ~500 |
+
+**Total** : 15 fichiers, ~3900 lignes de documentation
+
+**Notes sur les équivalents :**
+- **Developer Productivity** : Installé comme équivalent fonctionnel de "Developer Productivity / AI for Developers". Couvre les aspects d'assistance IA via l'automatisation de contenu technique et les scripts pour développeurs.
 
 ---
 
