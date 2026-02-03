@@ -121,8 +121,7 @@ return Results.Ok(users);
 ```
 
 Note:
-IO non bloquants de bout en bout. Async streams pour les flux.
-Async streams pour les flux (`IAsyncEnumerable<T>`), cancellation mieux propagée.
+IO non bloquants de bout en bout. Async streams (`IAsyncEnumerable<T>`) et cancellation mieux propagée.
 
 --
 
