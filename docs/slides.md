@@ -41,6 +41,7 @@ Focus sur les écarts majeurs. Les détails seront pour une prochaine session.
 
 Note:
 .NET Framework vit en maintenance. L’innovation est côté .NET moderne.
+Pas de HTTP/2/3 natif, pas de trimming/container images légères.
 
 --
 
@@ -52,6 +53,7 @@ Note:
 
 Note:
 Le saut n’est pas que syntaxique : hosting, perf et tooling changent.
+Perf : HTTP/2/3, JSON source generators, pooling sockets, GC server. Infra : PublishTrimmed/AOT (optionnel), Single-file, containers distroless.
 
 --
 
@@ -63,6 +65,7 @@ Le saut n’est pas que syntaxique : hosting, perf et tooling changent.
 
 Note:
 Moins de config XML, plus de conventions. Les habitudes de build changent peu.
+Nouveau tooling : `dotnet format`, analyzers Roslyn, hot reload, `dotnet user-secrets`.
 
 ---
 
@@ -82,6 +85,7 @@ return status switch
 
 Note:
 Lisibilité immédiate, moins d’embranchements verbeux.
+Depuis C# 9/10 : patterns relationnels/logiques, list patterns (C# 11) utiles pour valider des payloads.
 
 --
 
@@ -94,6 +98,7 @@ var updated = user with { Name = "Jane" };
 
 Note:
 Messages immuables, faciles à comparer, moins de boilerplate.
+Records supportent l’égalité structurale et les `with` pour les copies partielles.
 
 --
 
@@ -105,6 +110,7 @@ if (name is not null) Console.WriteLine(name.Length);
 
 Note:
 Les nulls deviennent explicites. On déplace les bugs vers la compilation.
+Activer `nullable enable` génère des warnings guidant les corrections.
 
 --
 
@@ -116,6 +122,7 @@ return Results.Ok(users);
 
 Note:
 IO non bloquants de bout en bout. Async streams pour les flux.
+Async streams pour les flux (`IAsyncEnumerable<T>`), cancellation mieux propagée.
 
 --
 
@@ -127,6 +134,7 @@ ReadOnlySpan<byte> buffer = stackalloc byte[64];
 
 Note:
 Optimisations ciblées possibles quand on touche aux perfs réseau/IO.
+System.Text.Json, Kestrel et pipelines s’appuient sur Span/Memory pour limiter les allocations.
 
 --
 
@@ -157,6 +165,7 @@ Stratégie : activer les nullable warnings d’abord, puis records/patterns.
 
 Note:
 On garde les concepts métier, on change l’hébergement et la config.
+JSON par défaut via System.Text.Json (plus rapide, source-gen possible). Middleware remplace modules/handlers.
 
 --
 
@@ -176,6 +185,7 @@ public class UsersController : ControllerBase
 
 Note:
 Très proche de Web API 2. DI et attributs similaires.
+Filtrage, conventions de routes et validations restent familiers.
 
 --
 
@@ -193,6 +203,7 @@ app.Run();
 
 Note:
 Utile pour endpoints simples, health checks, PoC. Controllers restent pertinents pour le reste.
+Binding simplifié, résultats typés (`Results`). Peut cohabiter avec controllers.
 
 --
 
@@ -204,6 +215,7 @@ Utile pour endpoints simples, health checks, PoC. Controllers restent pertinents
 
 Note:
 Ordre important. Middleware = substitut aux HttpModules/Handlers.
+Rate limiting et output caching sont fournis out-of-the-box en .NET 8.
 
 --
 
@@ -214,6 +226,7 @@ Ordre important. Middleware = substitut aux HttpModules/Handlers.
 
 Note:
 Clé : découpler le métier du framework via DI/tests pour limiter l’effort.
+Perf JSON : System.Text.Json + source-gen > Newtonsoft dans la majorité des cas.
 
 ---
 
