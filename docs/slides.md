@@ -1,119 +1,76 @@
 # Évolution de l’écosystème .NET
-## De .NET Framework 4.8 à .NET 8
-### C# • ASP.NET API • Trajectoire LTS
+## De .NET Framework 4.8 à .NET 8/10
+### C# • ASP.NET Core • Trajectoire LTS
 
 Note:
-Session d’évolution.
-Pas de projet de migration immédiat.
-Objectif : comprendre pour mieux décider plus tard.
+Public : développeurs .NET intermédiaires.
+Objectif : préparer une montée progressive sans gel de prod.
 
 ---
 
-## Objectifs
-- Comprendre l’évolution de .NET
-- Identifier les impacts développeur
-- Se projeter dans une trajectoire maîtrisée
+## Objectifs de la session
+- Comparer .NET Framework 4.8 vs .NET 8 côté Web API
+- Voir les vraies avancées C# utiles au quotidien
+- Identifier ce que ça change pour l’équipe maintenant
 
 Note:
-Comprendre ≠ migrer maintenant.
+Pas de plan de migration détaillé aujourd’hui. Factuel, concret.
 
 ---
 
-# .NET : Évolution de la plateforme
+## Agenda (45 min)
+- 10’ Plateforme : ce qui change vraiment de 4.8 à 8
+- 10’ C# : évolutions majeures (7.3 → 12)
+- 15’ Web API : delta concret (hosting, config, perf)
+- 5’ Synthèse
+- 5’ Questions
+
+Note:
+Focus sur les écarts majeurs. Les détails seront pour une prochaine session.
+
+---
+
+# Plateforme .NET : 4.8 vs 8
 
 --
 
 ## .NET Framework 4.8 aujourd’hui
-- Stable
-- Supporté
-- Fiable
-- **Figé**
+- Stable, supporté, fiable
+- **Figé** : pas de nouvelles fonctionnalités
+- Windows-only, IIS couplé
 
 Note:
-.NET Framework n’est pas mort.
-Il est sécurisé mais n’évolue plus.
+.NET Framework vit en maintenance. L’innovation est côté .NET moderne.
 
 --
 
-## Support ≠ évolution
-- Correctifs : oui
-- Sécurité : oui
-- Nouvelles fonctionnalités : non
+## .NET 8 (LTS)
+- Cross-plateforme (Windows/Linux/containers)
+- Kestrel par défaut, IIS ou Nginx en reverse proxy
+- Config JSON + options, DI native, middleware pipeline
+- Gains perf noyau (JIT, GC, sockets, HTTP/2/3)
 
 Note:
-Support ne veut pas dire modernité.
-Toute l’innovation est côté .NET moderne.
+Le saut n’est pas que syntaxique : hosting, perf et tooling changent.
 
 --
 
-## Analogie terrain (banque)
-- Plateformes anciennes mais supportées
-- Environnements critiques
-- Fonctionnel volontairement maîtrisé
+## Ce qui change pour les devs
+- SDK unifié : `dotnet build/test/publish`
+- Projets SDK-style (csproj léger, références implicites)
+- Tooling Roslyn/analyzers, nullable et warnings utiles
+- Templates Web API modernes (controllers + minimal APIs)
 
 Note:
-Retour d’expérience libre-service bancaire.
-La stabilité prime sur l’innovation rapide.
-
---
-
-## Point clé
-### La plateforme technique borne le fonctionnel
-
-Note:
-Phrase clé à dire :
-"On peut coder… mais pas toujours concevoir librement."
-
---
-
-## FAQ — Plateforme
-- Peut-on rester en .NET 4.8 ?
-- Quel est le risque réel ?
-- Quand ça devient bloquant ?
-
-Note:
-Oui, on peut rester tant que le contexte le permet.
-Le risque est progressif : dette technique, limites fonctionnelles.
-Ça devient bloquant quand on veut évoluer.
+Moins de config XML, plus de conventions. Les habitudes de build changent peu.
 
 ---
 
-# C# : évolution du langage
+# C# 7.3 → 12 : les gros apports
 
 --
 
-## Pourquoi le langage a évolué
-- Lisibilité
-- Sécurité
-- Expressivité
-
-Note:
-C# a évolué pour aider le développeur, pas pour le compliquer.
-
---
-
-## AVANT — C# 7.3
-```csharp
-if (status == 200)
-{
-    return "OK";
-}
-else if (status == 404)
-{
-    return "Not Found";
-}
-else
-{
-    return "Error";
-}
-```
-
-Note:
-Beaucoup de bruit pour une intention simple.
-
---
-
-## APRÈS — C# moderne
+## Pattern matching
 ```csharp
 return status switch
 {
@@ -124,241 +81,149 @@ return status switch
 ```
 
 Note:
-Même logique.
-Phrase clé :
-"On lit l’intention, pas la mécanique."
+Lisibilité immédiate, moins d’embranchements verbeux.
 
 --
 
-## AVANT — DTO classique
-```csharp
-public class UserDto
-{
-    public int Id { get; set; }
-    public string Name { get; set; }
-
-    public UserDto(int id, string name)
-    {
-        Id = id;
-        Name = name;
-    }
-}
-```
-
-Note:
-Beaucoup de code pour un simple message.
-
---
-
-## APRÈS — record
+## Records & with-expressions
 ```csharp
 public record UserDto(int Id, string Name);
+
+var updated = user with { Name = "Jane" };
 ```
 
 Note:
-Même rôle fonctionnel.
-Immuable par défaut.
-Moins de dette technique.
+Messages immuables, faciles à comparer, moins de boilerplate.
 
 --
 
-## AVANT — null implicite
-```csharp
-string name = GetName();
-Console.WriteLine(name.Length);
-```
-
-Note:
-Risque invisible à la compilation.
-
---
-
-## APRÈS — nullable explicite
+## Nullable reference types
 ```csharp
 string? name = GetName();
-
-if (name != null)
-{
-    Console.WriteLine(name.Length);
-}
+if (name is not null) Console.WriteLine(name.Length);
 ```
 
 Note:
-Phrase clé :
-"On déplace les bugs de la prod vers la compilation."
+Les nulls deviennent explicites. On déplace les bugs vers la compilation.
 
 --
 
-## FAQ — C#
-- Est-ce obligatoire ?
-- Progressif ?
-- Compatible ?
+## Async/await partout + async streams
+```csharp
+var users = await _repository.GetAllAsync();
+return Results.Ok(users);
+```
 
 Note:
-Tout est opt-in.
-Adoption progressive, par projet, sans rupture.
+IO non bloquants de bout en bout. Async streams pour les flux.
+
+--
+
+## Span/Memory (perf sans allocations)
+```csharp
+ReadOnlySpan<byte> buffer = stackalloc byte[64];
+// Traitement sans allocations intermédiaires
+```
+
+Note:
+Optimisations ciblées possibles quand on touche aux perfs réseau/IO.
+
+--
+
+## FAQ C#
+- Obligatoire ? Non, opt-in par projet.
+- Progressif ? Oui, feature par feature.
+- Compatibilité ? Forte avec le code existant, compiler warn d’abord.
+
+Note:
+Stratégie : activer les nullable warnings d’abord, puis records/patterns.
 
 ---
 
-# ASP.NET Web API : évolution
+# Web API : 4.8 vs 8
 
 --
 
-## ASP.NET Web API (.NET 4.8)
-- System.Web
-- Global.asax
-- Web.config
-- Couplage IIS
+## Architecture : le delta clé
+
+| Web API 2 (.NET 4.8) | ASP.NET Core |
+|----------------------|--------------|
+| System.Web + IIS     | Kestrel + middleware, IIS/Nginx en reverse proxy |
+| Global.asax          | Program.cs minimal | 
+| Web.config           | appsettings.json + options | 
+| DI externe           | DI native (`AddScoped`, etc.) |
+| Hébergement Windows  | Cross-plateforme, conteneurs |
+| HttpModules/Handlers | Middleware pipeline |
 
 Note:
-Modèle historique, très connu.
+On garde les concepts métier, on change l’hébergement et la config.
 
 --
 
-## ASP.NET Web API : comparaison
-
-| Web API 2 (.NET 4.8) | ASP.NET Core Web API |
-|---------------------|----------------------|
-| System.Web          | Pipeline middleware  |
-| Global.asax         | Program.cs           |
-| Web.config          | appsettings.json     |
-| IIS obligatoire     | Auto-hébergé possible |
-| DI externe          | DI native            |
-
-Note:
-Vue macro structurelle.
-Phrase clé :
-"Les concepts restent proches, c’est l’infrastructure qui change."
-
---
-
-## AVANT — Web API 2
+## Controller classique en ASP.NET Core
 ```csharp
-[ApiController]
-[Route("api/users")]
-public class UsersController : ApiController
-{
-    [HttpGet("{id}")]
-    public IHttpActionResult Get(int id)
-    {
-        var user = _service.Get(id);
-        return Ok(user);
-    }
-}
-```
-
-Note:
-Code fonctionnel, dépendant de System.Web.
-
---
-
-## APRÈS — ASP.NET Core
-```csharp [|3|6]
 [ApiController]
 [Route("api/users")]
 public class UsersController : ControllerBase
 {
+    private readonly IUserService _service;
+    public UsersController(IUserService service) => _service = service;
+
     [HttpGet("{id}")]
-    public IActionResult Get(int id)
-    {
-        var user = _service.Get(id);
-        return Ok(user);
-    }
+    public IActionResult Get(int id) => Ok(_service.Get(id));
 }
 ```
 
 Note:
-Même métier.
-Phrase clé :
-"On ne réécrit pas le métier, on change l’hébergement."
+Très proche de Web API 2. DI et attributs similaires.
 
 --
 
-## Ce qui ne change pas
-- Controllers
-- Routing
-- Métier
-- JSON
+## Minimal API (pour exposer vite)
+```csharp
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddScoped<IUserService, UserService>();
+
+var app = builder.Build();
+app.MapGet("/api/users/{id}", async (int id, IUserService svc) =>
+    Results.Ok(await svc.GetAsync(id)));
+
+app.Run();
+```
 
 Note:
-Point rassurant.
+Utile pour endpoints simples, health checks, PoC. Controllers restent pertinents pour le reste.
 
 --
 
-## FAQ — Web API
-- Réécriture complète ?
-- Contrôleurs différents ?
-- Performances ?
+## Pipeline middleware
+- Logging structuré
+- AuthN/AuthZ (`UseAuthentication`, `UseAuthorization`)
+- CORS, compression, rate limiting
+- Endpoints (controllers ou minimal APIs)
 
 Note:
-Non.
-Très proches.
-Souvent meilleures sans effort.
+Ordre important. Middleware = substitut aux HttpModules/Handlers.
+
+--
+
+## FAQ Web API
+- Réécriture complète ? Non, métier conservé.
+- Performances ? + grâce à Kestrel, pooling, JSON plus rapide.
+- Hébergement ? IIS, Linux + Nginx, ou containers.
+
+Note:
+Clé : découpler le métier du framework via DI/tests pour limiter l’effort.
 
 ---
 
-# Cadence .NET & Trajectoire LTS
-
---
-
-## Comment évolue .NET
-- 1 version / an
-- LTS tous les 2 ans
-- STS rarement en production
+# Ce qu’il faut retenir
+- .NET 8 apporte hosting moderne, perf et cross-plateforme — sans changer votre métier Web API
+- C# moderne réduit le bruit (pattern matching, records, nullable) et sécurise la base
+- Pipeline middleware + DI native simplifient l’infra et améliorent les perfs
 
 Note:
-En entreprise, on raisonne LTS → LTS.
-
---
-
-## Situation au 24/01/2026
-- .NET 8 : LTS (fin 11/2026)
-- .NET 9 : STS
-- .NET 10 : LTS (depuis 11/2025)
-
-Note:
-.NET 8 est un choix validé et sain.
-
---
-
-## AVANT — vrai changement
-- .NET Framework → .NET moderne
-- Changement de plateforme
-
-Note:
-C’est le vrai saut technologique.
-
---
-
-## APRÈS — montée LTS
-- .NET 8 → .NET 10
-- Même plateforme
-
-Note:
-Phrase clé :
-"Le vrai saut est derrière nous."
-
---
-
-## FAQ — LTS
-- Pourquoi pas attendre .NET 10 ?
-- .NET 8 trop court ?
-- Nouvelle migration ?
-
-Note:
-Attendre bloque la modernisation.
-8 → 10 est une montée de version.
-
----
-
-## Conclusion
-- .NET 8 est un point d’entrée
-- Le vrai saut est déjà fait
-- La trajectoire est maîtrisée
-
-Note:
-Phrase de clôture :
-"On modernise maintenant pour ne pas subir plus tard."
+Les détails d’upgrade outillage/process pourront être couverts dans une session dédiée.
 
 ---
 
