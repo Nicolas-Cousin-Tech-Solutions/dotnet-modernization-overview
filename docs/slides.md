@@ -165,6 +165,14 @@ Span = vue sur une zone mémoire contiguë (pile ou heap) sans allocation ; Memo
 Note:
 Stratégie : activer les nullable warnings d’abord, puis records/patterns.
 
+Autres nouveautés C# disponibles (non abordées aujourd'hui) :
+- C# 8 : Interfaces default impl, using declarations, indices/ranges
+- C# 9 : Init-only properties, top-level statements, target-typed new
+- C# 10 : Global usings, file-scoped namespaces, extended property patterns
+- C# 11 : Raw string literals, required members, list patterns, UTF-8 strings
+- C# 12 : Primary constructors, collection expressions, inline arrays, alias any type
+Ces features améliorent la productivité mais ne sont pas critiques pour débuter.
+
 ---
 
 # Web API : 4.8 vs 8
